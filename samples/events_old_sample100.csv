@@ -1,0 +1,101 @@
+id,user_id,sequence_number,session_id,created_at,ip_address,city,state,postal_code,browser,traffic_source,uri,event_type
+2374286,,2,533c2d6e-3551-4a72-81a8-847b1019a5ea,2024-08-26 02:25:00 UTC,93.197.150.128,Lincoln,Nebraska,68506,Chrome,Organic,/product/765,product
+1881433,,1,dc898f07-87c2-49ac-b90e-d95b2327f3aa,2019-05-09 12:19:00 UTC,81.141.63.76,London,England,SW12,Chrome,Adwords,/product/20449,product
+1020130,78160.0,1,13236cf9-eb75-4c13-8b12-33e6a1aa4ecc,2024-06-05 17:45:38 UTC,95.125.39.139,Taizhou,Jiangxi,336011,Safari,Email,/department/men/category/fashionhoodies&sweatshirts/brand/alpinestars,department
+1425752,,2,f26c25d6-f3db-4681-9aa2-fbc421fb1a56,2023-07-23 10:06:00 UTC,140.253.111.220,Hengyang,Jiangsu,226006,Chrome,Email,/product/11637,product
+362514,27844.0,3,9394e143-44ac-41b3-baf7-5f7e5a43a8e3,2022-10-17 13:58:31 UTC,20.117.216.103,Baincthun,Hauts-de-France,62360,Chrome,Facebook,/cart,cart
+254261,19637.0,13,515c4164-fede-43f0-add6-2f1849cd5f1d,2023-03-27 10:10:42 UTC,128.164.33.41,Indianapolis,Indiana,46229,Chrome,Adwords,/purchase,purchase
+2218279,,1,8e69b2a2-cf99-401b-9f12-397b7388b33a,2020-05-16 07:24:00 UTC,55.89.85.38,Mokpo City,Jeollanam-do,530-350,Firefox,Email,/department/women/category/blazers&jackets/brand/tart,department
+1966707,,3,e6caba1e-ff8a-4e05-9df4-352e223bf530,2021-08-23 12:57:00 UTC,138.173.61.18,Bethlehem,North Carolina,28681,Safari,Email,/cart,cart
+52309,3905.0,1,6efc2a00-9a16-45e3-b934-1a0be3df85cc,2024-02-20 10:27:04 UTC,102.124.208.158,Virginia Beach,Virginia,23452,Firefox,Facebook,/department/men/category/outerwear&coats/brand/michaelkors,department
+2136248,,3,8460c111-2e35-48fe-a82a-c0b339cbbdad,2024-08-23 19:08:00 UTC,66.139.242.64,Essen,Nordrhein-Westfalen,45279,Safari,Facebook,/cart,cart
+1373433,,3,b6ae76d7-f929-4ba4-95cc-be82ae3e1087,2019-11-13 04:21:00 UTC,6.29.10.151,Changsha,Anhui,230022,Firefox,Facebook,/cancel,cancel
+231708,17927.0,5,70d2dbed-00f5-4a64-92ab-b75278fb559f,2021-10-21 16:51:06 UTC,73.25.50.104,Nanjing,Hubei,430071,Chrome,Email,/product/948,product
+1977848,,3,49a82d08-6029-4685-9267-b396b3b7385f,2020-12-08 07:39:00 UTC,129.211.218.104,Bolingbrook,Illinois,60490,Safari,Email,/cart,cart
+1189604,91072.0,2,cc5c3c57-dd20-4a7f-9ef3-d3f2e137032d,2021-09-28 13:31:13 UTC,175.42.71.71,Stockyard Point,Queensland,4703,Chrome,Organic,/department/men/category/socks/brand/2xu,department
+771333,59003.0,5,251e7f27-4ef0-4a2f-97be-52dca03625ad,2024-08-26 10:18:51 UTC,75.214.184.237,Barin Guo Yu Mongolu Autonomous Prefecture,Hunan,414000,Safari,Email,/product/28579,product
+871496,66621.0,1,6d1d0159-482a-4f6b-9d08-d87e0e5808e3,2024-06-24 08:38:12 UTC,177.33.219.201,Uruará,Pará,68140-000,Safari,YouTube,/department/men/category/pants/brand/haband,department
+1171630,89711.0,6,178eb4d0-af87-4d07-82eb-2b73831dda0b,2023-06-24 01:45:58 UTC,170.72.14.10,Daegu Metropolitan City,Daegu Metropolitan City,704-060,Firefox,Email,/cart,cart
+1683335,,3,78ed210f-c196-4240-a5dd-df1faa9eac00,2022-01-20 17:52:00 UTC,53.211.235.16,Chengdu,Shandong,250061,Chrome,Email,/cancel,cancel
+2047527,,1,c46a3b9e-24a2-41c6-8494-9f20827abf92,2019-07-18 01:49:00 UTC,126.202.155.181,Tuscaloosa,Alabama,35401,Firefox,Email,/department/women/category/leggings/brand/allegrak,department
+2030381,,3,756dd0a4-7411-4b05-8869-78e6869125a7,2022-06-25 04:34:00 UTC,161.122.168.123,Farmington,Minnesota,55024,Safari,Adwords,/cart,cart
+966506,73964.0,11,ca3f82ca-c706-4b13-8f04-d64a142916c1,2022-06-01 13:09:22 UTC,68.222.223.102,Maoming,Guangxi Zhuang Autonomous Region,536063,Chrome,Facebook,/product/22545,product
+1263388,96714.0,6,882d4b38-12bb-42cc-9eb9-0a44d76f34b4,2023-08-13 05:53:20 UTC,19.19.126.246,Outreau,Hauts-de-France,62230,Chrome,Email,/cart,cart
+590616,45284.0,6,0f41bde8-497e-4cf0-bd27-17bb9eb87ef6,2023-03-10 05:56:16 UTC,98.20.93.192,Salvador,Bahia,40301-155,Firefox,Adwords,/cart,cart
+418742,32073.0,10,ab26bd94-89a2-42ea-80fb-007ca36db03b,2024-07-08 01:13:04 UTC,167.90.188.70,Shenzhen,Jilin,132001,Firefox,Email,/department/men/category/accessories/brand/levi's,department
+55920,4177.0,2,704fcac2-5e10-49f8-b7ad-baa39838c161,2021-11-27 12:51:58 UTC,77.183.87.226,Seoul,Seoul,143-130,Chrome,Email,/department/men/category/fashionhoodies&sweatshirts/brand/lrg,department
+158877,12213.0,4,ab60858e-0bcc-4c85-933c-51325473274e,2022-10-19 03:03:35 UTC,167.65.252.33,Ubajara,Ceará,62350-000,Firefox,Adwords,/cart,cart
+2339367,,1,89dcb9c8-6e97-4649-995c-b7e4817a5627,2020-04-27 12:18:00 UTC,24.232.73.163,Gimpo City,Gyeonggi-do,415-880,Chrome,Email,/department/men/category/accessories/brand/thetiebar,department
+185769,14344.0,6,e9bd7707-2440-4ee5-ad64-9fac8674ff9a,2023-08-18 12:31:07 UTC,64.253.161.250,San Francisco,California,94118,Chrome,Email,/cart,cart
+1057369,80949.0,7,f512d4f9-2ec8-45c6-a988-abccf1340b1f,2022-04-28 04:24:39 UTC,163.145.32.120,Vechta,Niedersachsen,49377,Safari,Adwords,/department/women/category/intimates/brand/justsexy,department
+350849,26966.0,5,5693411e-31d9-4d34-a385-701f985889a8,2020-05-12 10:12:32 UTC,120.186.114.203,Shanghai,Guangxi Zhuang Autonomous Region,545005,Firefox,Organic,/purchase,purchase
+1184017,90679.0,2,cf5a867a-13bf-4f6c-9f2e-a80d362e15be,2024-03-10 12:15:27 UTC,168.165.7.48,Camp Springs,Maryland,20748,Firefox,YouTube,/department/men/category/suits&sportcoats/brand/josephabboud,department
+454084,34747.0,3,c0fe36f1-9c67-486d-b858-060c545e619e,2020-10-04 14:23:33 UTC,195.95.110.29,Ansbach,Bayern,91522,Chrome,Email,/cart,cart
+1591424,,1,a22e2e97-a36a-4291-ad04-1ec6a60ce270,2022-02-27 01:18:00 UTC,148.189.232.181,Ashford,England,TN23,Chrome,Email,/product/25432,product
+2147992,,3,eed8b1b7-34f7-40f9-8920-f2137c30c8c9,2021-07-07 12:33:00 UTC,126.228.225.105,Chicago,Illinois,60619,Chrome,YouTube,/cancel,cancel
+234999,18150.0,5,2918d2e2-2b51-43c5-85c7-8cff33b097d0,2023-10-27 08:56:28 UTC,136.106.196.28,Shanghai,Beijing,100081,Safari,Organic,/product/22345,product
+2074495,,1,7fdc866d-0500-4c04-969a-24aa7f49303b,2022-12-19 16:05:00 UTC,24.211.156.197,Los Hueros,Comunidad de Madrid,28810,Safari,Adwords,/product/1012,product
+15825,1180.0,1,fc731c9f-f542-466a-aaea-6bcfd7f75c23,2023-05-03 15:11:16 UTC,112.165.208.77,Tipton,England,DY4,Chrome,Email,/department/men/category/socks/brand/vanheusen,department
+2326786,,2,8c7abb97-3d00-4dff-820c-683b7aa7bfca,2023-02-28 16:49:00 UTC,61.126.89.125,Manaus,Amazonas,69090,Chrome,Email,/cart,cart
+63493,4745.0,11,543ecb21-48fd-417e-a805-cfda04c7562b,2023-10-23 23:31:24 UTC,185.40.33.146,Marechal Deodoro,Alagoas,57160-000,Chrome,Email,/product/26776,product
+1972729,,1,efb8c61b-f049-4775-ae61-99d659a85e6b,2023-05-01 08:29:00 UTC,19.13.122.156,Yinchuan,Guangdong,518024,Safari,Adwords,/department/women/category/swim/brand/deltaburke,department
+820189,62659.0,5,9a5e8175-1c7d-4054-83dd-13ca687d1c12,2023-03-31 07:37:55 UTC,107.25.97.222,New York,New York,11355,Firefox,Email,/product/7124,product
+331476,25584.0,1,0e87f13d-de2f-4b8c-b003-6c8fbbc3dcb8,2022-12-28 17:37:20 UTC,157.208.85.241,Paris,Île-de-France,75016,Chrome,Email,/department/men/category/pants/brand/nautica,department
+683932,52291.0,6,c84b509d-82c7-486a-ac2d-88bea0c9fccc,2022-04-27 23:25:10 UTC,137.197.94.123,Gimhae City,Gyeongsangnam-do,621-870,Safari,Email,/cart,cart
+2413221,,3,9b3455b9-a884-47d5-900d-b53ae33ba7b3,2020-11-08 08:48:00 UTC,119.29.52.60,Gorzów Wielkopolski,Lubuskie,66,Chrome,YouTube,/cart,cart
+1490274,,1,2ef7abe4-8729-4b54-befd-06fef40495b4,2020-09-21 12:53:00 UTC,61.114.92.29,Pithiviers-le-Vieil,Centre-Val de Loire,45300,Chrome,Adwords,/product/27742,product
+2076736,,2,319e8899-32b9-4f91-8277-7307b4950282,2023-07-30 02:01:00 UTC,178.191.209.80,Dortmund,Nordrhein-Westfalen,44145,Firefox,Email,/product/23757,product
+1521598,,2,af55002c-7f3e-4a55-8d95-881d107003c2,2020-10-02 06:56:00 UTC,217.42.154.133,Beijing,Heilongjiang,150300,Firefox,Email,/product/1186,product
+706045,53930.0,6,62c67d3e-ddaf-427c-ae2c-c928a554e4df,2023-10-26 07:46:00 UTC,131.61.107.92,Wada area,Fujian,362302,Firefox,Email,/cart,cart
+99416,7588.0,8,7f9f8e0f-438e-4128-b483-777eaed418a6,2023-01-09 08:14:00 UTC,200.100.232.205,Conselheiro Lafaiete,Minas Gerais,36400-000,Firefox,Facebook,/product/19827,product
+1161905,88961.0,5,47b7903c-d5d4-42fe-8ec7-25f9b729ebbd,2024-07-02 16:06:21 UTC,152.25.252.8,Yiyang,Zhejiang,315299,Chrome,Facebook,/product/18790,product
+2282826,,2,804c3dd0-01ee-48f3-bfc0-bb1fa5666209,2023-03-04 06:16:00 UTC,103.234.232.133,Horizon West,Florida,34787,Chrome,Email,/product/9213,product
+1649261,,1,4f8ca48f-c5fc-4117-a11a-ade4b74d229c,2020-10-12 06:17:00 UTC,97.120.204.156,Shanghai,Beijing,101509,Firefox,Email,/department/men/category/socks/brand/carhartt,department
+2151747,,3,4410865b-185b-4d52-bc41-856645e84bbe,2019-01-19 13:48:00 UTC,103.144.81.93,New York,New York,11219,Chrome,Adwords,/cart,cart
+2108263,,1,41189865-f499-41c8-bc2d-6693bf73ac8d,2019-08-12 13:42:00 UTC,165.186.195.100,Tokyo,Tokyo,143-0012,Chrome,Email,/product/19055,product
+1825508,,1,ae2707b6-502a-4f85-8a85-1c99759282c9,2021-12-15 15:51:00 UTC,94.200.10.232,Jiamus,Jiangsu,226200,Chrome,YouTube,/product/1476,product
+1942633,,3,51ff218c-9fa9-4458-9b69-60359df842b1,2023-11-20 06:43:00 UTC,25.174.45.145,Greenville,North Carolina,27834,Firefox,Organic,/cancel,cancel
+239655,18479.0,4,ba46c090-fa21-45b1-886c-dc4d53c3c2c0,2022-10-27 04:26:32 UTC,169.42.133.160,Goole,England,DN14,Firefox,Facebook,/department/women/category/intimates/brand/artwedding,department
+416128,31853.0,4,20154a11-e8db-4736-9c6b-cd9f9ff5c64a,2023-06-06 00:17:09 UTC,1.161.60.115,Handan,Guangdong,528463,Other,YouTube,/cart,cart
+756799,57901.0,8,29b71b56-a4ca-4eb7-9fb4-bcc328065fc3,2024-07-21 02:18:34 UTC,62.212.255.54,Foshan,Guangdong,511450,Firefox,Email,/product/7016,product
+976703,74781.0,5,8f94b173-72ec-4373-b583-1d30d1f99a51,2021-05-18 11:02:23 UTC,179.97.239.45,Kaifeng,Jilin,138000,Chrome,Facebook,/purchase,purchase
+1847377,,2,67468c42-4510-4733-9914-b519ec832812,2020-08-01 08:08:00 UTC,137.223.196.8,Beijing,Shanghai,201824,Chrome,Email,/product/11769,product
+465130,35595.0,1,7d3fea16-499c-4ae9-9390-9846aa699da6,2024-06-06 23:53:22 UTC,104.2.38.152,Lockport,Illinois,60441,Safari,Organic,/department/men/category/tops&tees/brand/tommyhilfiger,department
+2004017,,2,3bdee6b3-be9d-459f-8b73-b5ac4bb556ea,2021-10-06 07:24:00 UTC,16.51.51.206,Seoul,Seoul,156-034,Safari,Email,/cart,cart
+1396901,,3,bc32c4a9-afd7-4276-bbba-b318fef782d4,2024-06-02 09:06:00 UTC,209.145.220.53,London,England,SW17,Firefox,Adwords,/cart,cart
+569287,43637.0,4,fd6b660f-3ee6-4ca4-adc6-3f715ef2c248,2024-06-24 09:45:34 UTC,86.178.38.223,Shanghai,Zhejiang,325035,Chrome,Email,/department/men/category/shorts/brand/jetlag,department
+1406929,,1,16ce2c6c-8a89-4727-ac69-62c381202955,2021-06-30 15:00:00 UTC,133.76.90.95,East Windsor,New Jersey,8520,Firefox,YouTube,/product/26650,product
+167694,12914.0,4,c603bccf-e5b4-4388-8323-2762c3258a66,2024-09-03 05:36:25.460642 UTC,137.45.194.94,East Wenatchee,Washington,98802,Firefox,Email,/department/women/category/tops&tees/brand/mylittlepony,department
+452360,34607.0,7,bb6746b9-6f47-4772-9923-5f825c39e9ee,2024-06-02 05:23:06 UTC,71.204.20.169,Iranduba,Amazonas,69405-000,IE,Facebook,/purchase,purchase
+564652,43271.0,3,95e2e7b5-f03f-429b-8a6b-ffeb9cc13956,2024-03-01 09:54:11 UTC,113.102.225.35,Shenzhen,Hebei,74300,Chrome,Email,/cart,cart
+2308005,,2,d1c0c032-43e7-4ee9-b8fd-c7a16925c581,2019-06-30 01:07:00 UTC,22.202.117.174,Carrollton,Georgia,30117,Chrome,Email,/product/22221,product
+2351887,,1,b705b149-30b6-400d-9304-a95db2c31e3f,2019-10-18 16:55:00 UTC,57.247.248.227,Malville,Pays de la Loire,44260,Chrome,Email,/department/men/category/pants/brand/izod,department
+1584638,,1,d0f97a33-1f82-4511-8ca1-47858015857f,2019-09-15 11:58:00 UTC,139.170.237.112,Paris,Île-de-France,75018,Chrome,Adwords,/product/4541,product
+1727667,,3,0c2bab68-77f6-474a-bfc1-d482788345a1,2019-08-15 03:20:00 UTC,153.223.38.149,Loudi,Guizhou,552100,Chrome,Adwords,/cart,cart
+37920,2903.0,1,1704196a-6172-4612-9a90-55f51b4cc3e5,2024-06-27 01:25:32 UTC,135.230.203.101,Dangjin City,Chungcheongnam-do,343-830,Firefox,Email,/home,home
+554473,42549.0,3,9cc26993-e22b-429d-9885-b3a0359215d3,2023-05-04 23:42:36 UTC,223.198.2.21,,Georgia,30044,Chrome,Facebook,/cart,cart
+1505821,,2,1161846b-e126-4f34-a81d-2adab77e41d7,2022-04-12 06:33:00 UTC,203.86.18.6,Handan,Tianjin,300280,Chrome,Organic,/product/9753,product
+2020876,,1,f10f8aea-604e-47cc-ba0d-b376842c0575,2020-07-18 12:39:00 UTC,189.113.140.13,Seoul,Seoul,136-131,Safari,Email,/department/women/category/jumpsuits&rompers/brand/zeniche,department
+944876,72197.0,1,f179b870-0b1a-4ce2-b86d-f38d54b9b6ca,2023-04-15 21:41:14 UTC,80.186.114.209,Seoul,Seoul,122-100,Firefox,Email,/department/men/category/swim/brand/hurley,department
+1983847,,1,360e217c-45c5-4add-a40c-eab1fd3c9b44,2020-08-15 08:06:00 UTC,114.253.103.235,Xi'an,Hubei,430415,Safari,Email,/product/15802,product
+34899,2666.0,7,fed06f52-95b7-4f64-b426-562b6502b3e4,2024-06-18 03:25:30 UTC,17.58.109.85,Anyang,Guangdong,515061,Firefox,Email,/department/women/category/skirts/brand/billabong,department
+1745263,,2,c586c8f4-5562-4d32-beae-1176641891e4,2022-01-08 12:47:00 UTC,169.5.184.85,Hamamatsu city,Shizuoka,431-0201,Firefox,Adwords,/product/7318,product
+370676,28432.0,4,d3700f38-1fe6-44e8-8102-1b356d69950c,2024-08-11 07:59:36 UTC,18.7.18.156,Vandœuvre-lès-Nancy,Grand Est,54500,Chrome,Adwords,/cart,cart
+346843,26679.0,4,684cedd6-0a1d-46f9-805d-ee305b797117,2024-02-08 03:30:12 UTC,174.163.241.28,Shan Tou,Fujian,350028,IE,Organic,/department/women/category/socks&hosiery/brand/thatsrad,department
+583241,44731.0,6,1a65931d-2cff-48a4-8521-183891f15711,2024-05-18 02:40:55 UTC,64.215.207.69,Cleveland,Tennessee,37311,Chrome,Adwords,/cart,cart
+1569873,,3,43afc849-0c42-4be1-8423-c249c5892248,2020-10-31 03:46:00 UTC,97.167.174.248,Zhanjiang,Hebei,75100,Chrome,Adwords,/cancel,cancel
+331394,25577.0,1,f15400c8-35e0-4e68-ab48-7a58c189754e,2021-01-12 01:08:29 UTC,168.198.185.70,Dalian,Hubei,435005,Safari,Adwords,/home,home
+1136368,86972.0,4,3f1c1b30-13c9-42f0-9e63-58dd1b257104,2022-02-14 13:31:19 UTC,87.44.137.237,Argenteuil,Île-de-France,95100,Firefox,Email,/cart,cart
+399655,30631.0,3,94721009-1c76-4578-8c6a-521fb85c117e,2023-06-29 23:24:53 UTC,62.90.69.193,Jacarezinho,Paraná,86400-000,Chrome,Adwords,/product/3932,product
+282783,21811.0,5,f6438d55-9335-4925-a33b-7c749247b1d3,2023-09-25 12:30:43 UTC,40.49.138.7,Haixi Mongolian Tibetan Autonomous Prefecture,Liaoning,116399,Chrome,Adwords,/product/26126,product
+1983464,,1,2bb54784-f583-4abc-8f21-efa338039362,2019-09-09 08:01:00 UTC,223.199.202.14,West Lake Stevens,Washington,98258,Chrome,Facebook,/product/19390,product
+1260864,96510.0,1,1045b800-bd9e-41ce-a21d-d975e82d5a4d,2024-04-27 05:00:49 UTC,138.52.3.58,Beijing,Guangdong,516221,Safari,Email,/home,home
+2384723,,2,f421bec0-8e46-46bd-98dd-d6aa6d2a4ade,2023-03-06 15:57:00 UTC,212.101.120.169,Maoming,Guangxi Zhuang Autonomous Region,536063,Safari,Facebook,/product/19565,product
+806383,61688.0,3,b9fe5b9c-d426-4039-b0e7-c9468eb66315,2024-08-07 14:46:27 UTC,217.3.130.10,Wakefield,England,WF1,Firefox,Email,/product/11646,product
+34637,2648.0,2,fe8c647c-ae3a-4ef0-9d1d-e91f329bbe0c,2021-04-10 01:58:18 UTC,84.184.60.90,Changsha,Anhui,230022,Chrome,YouTube,/product/21402,product
+807277,61766.0,3,b6e713c7-a1b3-406a-a514-4465cf3185ba,2024-08-18 22:41:03 UTC,102.215.223.238,Kineton,England,CV35,Chrome,Adwords,/product/24712,product
+1523645,,3,3d381b7b-da7a-47a3-a1e5-ff04f1cdef95,2021-11-15 15:14:00 UTC,58.109.224.49,Canaã dos Carajás,Pará,68537-000,Chrome,Facebook,/cancel,cancel
+296666,22863.0,12,f0d77350-213d-4f88-982e-ca6aa96b1ede,2020-06-11 07:53:35 UTC,55.176.215.15,Swindon,England,SN3,Firefox,YouTube,/cart,cart
+728063,55621.0,3,5ec527d8-7f47-4f32-9fc1-f7ec2b2f6f96,2022-12-12 09:08:01 UTC,23.53.20.177,Wuhan,Henan,457000,Chrome,Adwords,/cart,cart
+2285028,,1,d5f49d5b-5216-4dd7-81b3-6e40654e29c8,2024-01-30 17:44:00 UTC,162.62.161.147,Fort Worth,Texas,76179,IE,Email,/product/18234,product
+2041417,,1,0bb449dd-903c-4d2f-845a-9c9b8aaa54a4,2019-11-22 03:27:00 UTC,201.150.175.24,Bellingham,Washington,98225,Safari,YouTube,/product/17615,product
