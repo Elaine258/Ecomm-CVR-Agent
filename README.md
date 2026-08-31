@@ -1,6 +1,6 @@
-# Ecomm CVR Agent
+<div align="center">
 
-## 电商 SKU 转化异常诊断与闭环验证 Agent
+# 电商 SKU 转化异常诊断与闭环验证 Agent
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-1C3C3C)
@@ -8,14 +8,9 @@
 ![DeepSeek](https://img.shields.io/badge/LLM-DeepSeek-4D6BFE)
 ![Status](https://img.shields.io/badge/Stage-Validated%20PoC-orange)
 
-一个面向电商 SKU 的 **Workflow-based Agent PoC（基于工作流的智能体概念验证）**：使用确定性规则计算业务事实，通过 LangGraph 编排诊断路径，再由 LLM 将结构化结果转换为可读的业务报告。
+</div>
 
-```text
-数据 → 指标 → 异常检测 → 漏斗定位 → 结构化行动
-    → 行动状态 → 复诊 → 效果验证 → 下一轮行动
-```
-
-项目定位是面向电商分析、AI 产品和 Agent 应用岗位的面试作品。它是一个可运行的 **Functional Prototype（功能原型）**，不是生产系统，也不把 LLM 生成内容当作业务事实。
+---
 
 ## 项目亮点
 
@@ -383,36 +378,3 @@ Dynamic Yield 与 TheLook 的数据来源、时间范围和统计口径不同，
 ### Closed Loop 需要新数据
 
 行动完成后只有底层业务数据发生变化，复诊才可能观察到指标变化。系统不会伪造“行动后提升”。
-
-### 商品图片不在当前范围
-
-当前 TheLook 数据快照不包含商品图片资产，因此项目没有接入图片质量分析 Tool，也不会虚构图片原因。
-
-## 当前范围
-
-已完成：
-
-- [x] TheLook 数据接入与 Session Attribution 验证
-- [x] SKU 和 Category 转化指标
-- [x] 确定性异常规则与状态路由
-- [x] 漏斗薄弱环节与价格位置分析
-- [x] Dynamic Yield 行业背景参考
-- [x] 结构化行动与 LLM 业务报告
-- [x] JSONL 诊断历史与 Action Status
-- [x] 复诊对比、Validation Result 与 Next Round Action
-- [x] Streamlit 交互页面
-- [x] 四类端到端演示案例
-
-面试作品收尾范围：
-
-- [ ] CI 自动测试
-- [ ] 轻量日志与可观测性
-- [ ] Streamlit 核心页面截图
-
-当前版本不扩展登录、权限、多用户、生产部署、真实平台 API 或自动 A/B 实验等生产化能力。
-
-## 项目定位
-
-> 一个面向电商 SKU 转化异常诊断的 Agentic Workflow PoC，已经形成可交互的功能原型，并通过四类业务状态验证核心路径。
-
-项目证明的是如何把数据分析、确定性业务规则、LangGraph 编排、结构化行动和反馈验证组合成一条可解释的诊断链路，而不是证明系统已经具备生产部署能力。
