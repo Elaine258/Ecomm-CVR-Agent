@@ -1,6 +1,6 @@
 <div align="center">
 
-# 电商 SKU 转化异常诊断与闭环验证 Agent
+# 🛒 电商 SKU 转化异常诊断与闭环验证 Agent
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-1C3C3C)
@@ -12,7 +12,9 @@
 
 ---
 
-## 项目亮点
+<a id="项目亮点"></a>
+
+## ✨ 项目亮点
 
 - 基于 TheLook 公开合成电商数据，而不是由 LLM 虚构指标
 - 使用确定性规则计算 CVR、Category Benchmark 和异常等级
@@ -23,21 +25,27 @@
 - 支持 Action Status、复诊对比、Validation Result 和 Next Round Action
 - 使用 Streamlit 将技术字段翻译成业务可读界面
 
-## 目录
+<a id="目录"></a>
 
+## 🧭 目录
+
+- [快速开始](#快速开始)
+- [产品页面](#产品页面)
 - [业务问题](#业务问题)
 - [四类验证案例](#四类验证案例)
 - [系统架构](#系统架构)
 - [核心能力](#核心能力)
 - [规则与 LLM 职责分离](#规则与-llm-职责分离)
-- [闭环验证](#闭环验证)
-- [产品页面](#产品页面)
-- [指标与数据口径](#指标与数据口径)
-- [快速开始](#快速开始)
-- [项目结构](#项目结构)
 - [证据边界](#证据边界)
+- [闭环验证](#闭环验证)
+- [指标与数据口径](#指标与数据口径)
+- [项目结构](#项目结构)
 
-## 业务问题
+
+
+<a id="业务问题"></a>
+
+## 🎯 业务问题
 
 发现某个商品购买转化率偏低，只是分析的起点。业务还需要回答：
 
@@ -50,7 +58,9 @@
 
 本项目将这些问题组织为一条可重复运行的诊断链路，而不是生成一次性的分析文本。
 
-## 四类验证案例
+<a id="四类验证案例"></a>
+
+## 🧪 四类验证案例
 
 以下案例来自当前 TheLook 数据快照，并按照同一套确定性规则执行。它们用于验证路由与业务边界，不代表模型准确率或统计显著性。
 
@@ -63,7 +73,9 @@
 
 四类案例体现的不是“每个商品都必须得到复杂结论”，而是 Agent 能根据证据状态选择继续分析或安全停止。
 
-## 系统架构
+<a id="系统架构"></a>
+
+## 🏗️ 系统架构
 
 系统分为两层：LangGraph 负责单次诊断工作流，应用层负责历史、行动状态、复诊和效果验证。
 
@@ -105,7 +117,9 @@ flowchart TD
 
 `Diagnosis History、Validation、Next Round Action` 由统一入口和应用层衔接，不伪装成 LangGraph 内部节点。
 
-## 核心能力
+<a id="核心能力"></a>
+
+## 🧩 核心能力
 
 ### 1. Conversion Metrics｜转化指标
 
@@ -169,7 +183,9 @@ Agent 使用固定 Action Contract 输出下一步行动：
 
 结构化字段可以继续被历史管理和闭环逻辑读取，而不是停留在自然语言报告中。
 
-## 规则与 LLM 职责分离
+<a id="规则与-llm-职责分离"></a>
+
+## 🧠 规则与 LLM 职责分离
 
 本项目采用 **Deterministic Rules + LLM Explanation（确定性规则 + 大模型解释）** 的混合架构。
 
@@ -186,7 +202,9 @@ Agent 使用固定 Action Contract 输出下一步行动：
 
 > 规则负责决定事实，LLM 负责解释事实。
 
-## 闭环验证
+<a id="闭环验证"></a>
+
+## 🔄 闭环验证
 
 每次诊断结果保存为 JSONL 历史记录，并包含 Action Status：
 
@@ -207,7 +225,9 @@ pending → in_progress → completed → validated
 
 当前闭环是可运行的验证机制原型：行动状态由用户更新，系统负责保存历史、比较复诊结果并生成下一轮行动；它没有连接真实电商平台自动执行运营动作。
 
-## 产品页面
+<a id="产品页面"></a>
+
+## 🖥️ 产品页面
 
 Streamlit 页面按照业务阅读顺序组织为：
 
@@ -221,7 +241,9 @@ Streamlit 页面按照业务阅读顺序组织为：
 
 页面将 `severe / cart_to_purchase / expand_investigation` 等内部字段翻译为“严重异常 / 购物车→购买 / 扩大调查范围”，形成 Business Translation Layer（业务翻译层）。
 
-## 指标与数据口径
+<a id="指标与数据口径"></a>
+
+## 📐 指标与数据口径
 
 ### 核心公式
 
@@ -261,7 +283,9 @@ Relative Deviation
 - [`docs/closed_loop_design.md`](docs/closed_loop_design.md)：历史、行动状态与验证分支
 - [`docs/conversion_diagnosis_decision_tree.md`](docs/conversion_diagnosis_decision_tree.md)：诊断决策树
 
-## 快速开始
+<a id="快速开始"></a>
+
+## 🚀 快速开始
 
 ### 1. 克隆仓库
 
@@ -327,7 +351,9 @@ streamlit run app.py
 16599  insufficient_data
 ```
 
-## 项目结构
+<a id="项目结构"></a>
+
+## 📁 项目结构
 
 ```text
 Ecomm-CVR-Agent/
@@ -356,7 +382,9 @@ Ecomm-CVR-Agent/
 from src.conversion_diagnosis_agent import diagnose_product
 ```
 
-## 证据边界
+<a id="证据边界"></a>
+
+## 🛡️ 证据边界
 
 ### 异常不等于因果
 
