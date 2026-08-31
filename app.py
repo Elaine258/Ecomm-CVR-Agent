@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import streamlit as st
 import altair as alt
+from dotenv import load_dotenv
 
 
 # ==================================================
@@ -19,12 +20,19 @@ if ROOT not in sys.path:
         ROOT
     )
 
+load_dotenv()
+
 
 # ==================================================
 # 1. 正式业务History与开发测试History分离
 # ==================================================
 
-DATA_DIR = r"E:\agent\data"
+DATA_DIR = os.path.abspath(
+    os.getenv(
+        "ECOMM_DATA_DIR",
+        os.path.join(ROOT, "data")
+    )
+)
 
 BUSINESS_HISTORY_PATH = os.path.join(
     DATA_DIR,
@@ -34,6 +42,7 @@ BUSINESS_HISTORY_PATH = os.path.join(
 
 import src.diagnosis_history as diagnosis_history
 
+diagnosis_history.DATA_DIR = DATA_DIR
 diagnosis_history.HISTORY_PATH = (
     BUSINESS_HISTORY_PATH
 )

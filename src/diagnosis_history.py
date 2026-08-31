@@ -3,9 +3,24 @@ import json
 import uuid
 
 from datetime import datetime
+from dotenv import load_dotenv
 
 
-DATA_DIR = r"E:\agent\data"
+load_dotenv()
+
+ROOT = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        ".."
+    )
+)
+
+DATA_DIR = os.path.abspath(
+    os.getenv(
+        "ECOMM_DATA_DIR",
+        os.path.join(ROOT, "data")
+    )
+)
 
 HISTORY_PATH = os.path.join(
     DATA_DIR,
