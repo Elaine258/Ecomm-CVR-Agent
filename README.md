@@ -41,7 +41,89 @@
 - [指标与数据口径](#指标与数据口径)
 - [项目结构](#项目结构)
 
+<a id="快速开始"></a>
 
+## 🚀 快速开始
+
+### 1. 克隆仓库
+
+```bash
+git clone https://github.com/Elaine258/Ecomm-CVR-Agent.git
+cd Ecomm-CVR-Agent
+```
+
+### 2. 创建 Python 环境
+
+```bash
+conda create -n agent python=3.11 -y
+conda activate agent
+```
+
+### 3. 安装依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. 配置环境变量
+
+复制 `.env.example` 为 `.env`：
+
+```text
+DEEPSEEK_API_KEY=your_api_key_here
+```
+
+如果完整数据不放在仓库的 `data/` 下，可指定绝对路径：
+
+```text
+ECOMM_DATA_DIR=E:\agent\data
+```
+
+`.env` 已被 `.gitignore` 排除，请勿提交 API Key。
+
+### 5. 准备数据
+
+本仓库不重新分发完整 TheLook 数据。运行核心应用至少需要：
+
+```text
+data/
+├── events_old.csv
+├── products_old.csv
+└── industry_benchmark_comparison.xlsx
+```
+
+`events_old.csv` 和 `products_old.csv` 需要从 TheLook 数据源获取；仓库中的 `samples/` 仅用于查看字段结构，不能复现完整案例结果。详情见 [`data/README.md`](data/README.md)。
+
+### 6. 启动 Streamlit
+
+```bash
+streamlit run app.py
+```
+
+推荐依次输入以下 Product ID 查看不同路由：
+
+```text
+7498   severe
+4680   low
+19681  normal
+16599  insufficient_data
+```
+
+<a id="产品页面"></a>
+
+## 🖥️ 产品页面
+
+Streamlit 页面按照业务阅读顺序组织为：
+
+1. 商品 + 诊断总览
+2. 核心转化漏斗与 Category Benchmark
+3. 诊断结论与证据边界
+4. 可能影响因素（待验证）
+5. 下一步行动
+6. 折叠式诊断历史与闭环结果
+7. 完整 LLM 业务报告
+
+页面将 `severe / cart_to_purchase / expand_investigation` 等内部字段翻译为“严重异常 / 购物车→购买 / 扩大调查范围”，形成 Business Translation Layer（业务翻译层）。
 
 <a id="业务问题"></a>
 
@@ -202,6 +284,30 @@ Agent 使用固定 Action Contract 输出下一步行动：
 
 > 规则负责决定事实，LLM 负责解释事实。
 
+<a id="证据边界"></a>
+
+## 🛡️ 证据边界
+
+### 异常不等于因果
+
+系统可以确认 SKU 是否触发当前规则、哪个漏斗阶段相对较弱，但不能仅凭漏斗指标确定用户心理或真实流失原因。
+
+### Price Position 不等于 Price Cause
+
+价格百分位是描述性证据。即使 `price_status = high`，也不能证明价格导致转化下降。
+
+### External Benchmark 仅作背景参考
+
+Dynamic Yield 与 TheLook 的数据来源、时间范围和统计口径不同，因此不参与 Agent 的核心异常阈值计算，也不用于直接推算 SKU 应达到的 CVR。
+
+### 样本门槛不是显著性检验
+
+当前最低门槛为 20 Product Sessions，只是项目的诊断保护规则，不代表结论已经通过统计显著性检验。
+
+### Closed Loop 需要新数据
+
+行动完成后只有底层业务数据发生变化，复诊才可能观察到指标变化。系统不会伪造“行动后提升”。
+
 <a id="闭环验证"></a>
 
 ## 🔄 闭环验证
@@ -224,22 +330,6 @@ pending → in_progress → completed → validated
 | `unknown` | 证据不足 | `collect_validation_data` |
 
 当前闭环是可运行的验证机制原型：行动状态由用户更新，系统负责保存历史、比较复诊结果并生成下一轮行动；它没有连接真实电商平台自动执行运营动作。
-
-<a id="产品页面"></a>
-
-## 🖥️ 产品页面
-
-Streamlit 页面按照业务阅读顺序组织为：
-
-1. 商品 + 诊断总览
-2. 核心转化漏斗与 Category Benchmark
-3. 诊断结论与证据边界
-4. 可能影响因素（待验证）
-5. 下一步行动
-6. 折叠式诊断历史与闭环结果
-7. 完整 LLM 业务报告
-
-页面将 `severe / cart_to_purchase / expand_investigation` 等内部字段翻译为“严重异常 / 购物车→购买 / 扩大调查范围”，形成 Business Translation Layer（业务翻译层）。
 
 <a id="指标与数据口径"></a>
 
@@ -283,74 +373,6 @@ Relative Deviation
 - [`docs/closed_loop_design.md`](docs/closed_loop_design.md)：历史、行动状态与验证分支
 - [`docs/conversion_diagnosis_decision_tree.md`](docs/conversion_diagnosis_decision_tree.md)：诊断决策树
 
-<a id="快速开始"></a>
-
-## 🚀 快速开始
-
-### 1. 克隆仓库
-
-```bash
-git clone https://github.com/Elaine258/Ecomm-CVR-Agent.git
-cd Ecomm-CVR-Agent
-```
-
-### 2. 创建 Python 环境
-
-```bash
-conda create -n agent python=3.11 -y
-conda activate agent
-```
-
-### 3. 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. 配置环境变量
-
-复制 `.env.example` 为 `.env`：
-
-```text
-DEEPSEEK_API_KEY=your_api_key_here
-```
-
-如果完整数据不放在仓库的 `data/` 下，可指定绝对路径：
-
-```text
-ECOMM_DATA_DIR=E:\agent\data
-```
-
-`.env` 已被 `.gitignore` 排除，请勿提交 API Key。
-
-### 5. 准备数据
-
-本仓库不重新分发完整 TheLook 数据。运行核心应用至少需要：
-
-```text
-data/
-├── events_old.csv
-├── products_old.csv
-└── industry_benchmark_comparison.xlsx
-```
-
-`events_old.csv` 和 `products_old.csv` 需要从 TheLook 数据源获取；仓库中的 `samples/` 仅用于查看字段结构，不能复现完整案例结果。详情见 [`data/README.md`](data/README.md)。
-
-### 6. 启动 Streamlit
-
-```bash
-streamlit run app.py
-```
-
-推荐依次输入以下 Product ID 查看不同路由：
-
-```text
-7498   severe
-4680   low
-19681  normal
-16599  insufficient_data
-```
-
 <a id="项目结构"></a>
 
 ## 📁 项目结构
@@ -381,27 +403,3 @@ Ecomm-CVR-Agent/
 ```python
 from src.conversion_diagnosis_agent import diagnose_product
 ```
-
-<a id="证据边界"></a>
-
-## 🛡️ 证据边界
-
-### 异常不等于因果
-
-系统可以确认 SKU 是否触发当前规则、哪个漏斗阶段相对较弱，但不能仅凭漏斗指标确定用户心理或真实流失原因。
-
-### Price Position 不等于 Price Cause
-
-价格百分位是描述性证据。即使 `price_status = high`，也不能证明价格导致转化下降。
-
-### External Benchmark 仅作背景参考
-
-Dynamic Yield 与 TheLook 的数据来源、时间范围和统计口径不同，因此不参与 Agent 的核心异常阈值计算，也不用于直接推算 SKU 应达到的 CVR。
-
-### 样本门槛不是显著性检验
-
-当前最低门槛为 20 Product Sessions，只是项目的诊断保护规则，不代表结论已经通过统计显著性检验。
-
-### Closed Loop 需要新数据
-
-行动完成后只有底层业务数据发生变化，复诊才可能观察到指标变化。系统不会伪造“行动后提升”。
