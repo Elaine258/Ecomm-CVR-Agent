@@ -1,151 +1,252 @@
-# E-commerce Conversion Diagnosis Agent
-## 电商转化率诊断 Agent
+<div align="center">
 
-一个基于真实电商行为数据构建的 **Conversion Diagnosis Agent（转化诊断智能体）**。
+# 🛒 电商 SKU 转化异常诊断与闭环验证 Agent
 
-项目以 TheLook 电商数据为基础，通过确定性的转化指标计算、异常检测、漏斗定位、价格分析、结构化行动生成以及历史复诊验证，持续定位 SKU 的转化问题，并根据验证结果自动调整下一轮行动策略。
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-1C3C3C)
+![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![DeepSeek](https://img.shields.io/badge/LLM-DeepSeek-4D6BFE)
+![Status](https://img.shields.io/badge/Stage-Validated%20PoC-orange)
 
-它不是一个单纯依靠 LLM 生成分析报告的 Demo，而是一套：
-
-> **数据 → 诊断 → 行动 → 执行 → 复诊 → 验证 → 下一轮行动**
-
-的完整业务闭环。
+</div>
 
 ---
 
-# 1. Business Problem｜业务问题
+<a id="项目亮点"></a>
 
-在真实电商业务中，发现某个商品购买转化率偏低，只是问题的开始。
+## ✨ 项目亮点
 
-真正需要继续回答的是：
+- 基于 TheLook 公开合成电商数据，而不是由 LLM 虚构指标
+- 使用确定性规则计算 CVR、Category Benchmark 和异常等级
+- 根据 `normal / low / severe / insufficient_data` 进行条件路由
+- 对异常 SKU 定位 `Product → Cart` 与 `Cart → Purchase` 薄弱环节
+- 将价格位置与行业参考作为辅助证据，不直接推断因果关系
+- 输出结构化 Action Contract，而不是只有自然语言建议
+- 支持 Action Status、复诊对比、Validation Result 和 Next Round Action
+- 使用 Streamlit 将技术字段翻译成业务可读界面
 
-```text
-商品转化率低
-        ↓
-是否真的异常？
-        ↓
-相对于同品类表现如何？
-        ↓
-问题主要发生在哪个漏斗阶段？
-        ↓
-商品页 → 购物车？
-购物车 → 购买？
-        ↓
-当前证据能确认什么？
-        ↓
-还有哪些因素需要进一步验证？
-        ↓
-下一步具体应该补什么数据、做什么行动？
-        ↓
-行动执行之后有没有改善？
-        ↓
-如果没有改善，下一轮应该怎么调整？
+<a id="目录"></a>
+
+## 🧭 目录
+
+- [快速开始](#快速开始)
+- [产品页面](#产品页面)
+- [业务问题](#业务问题)
+- [四类验证案例](#四类验证案例)
+- [系统架构](#系统架构)
+- [核心能力](#核心能力)
+- [规则与 LLM 职责分离](#规则与-llm-职责分离)
+- [证据边界](#证据边界)
+- [闭环验证](#闭环验证)
+- [指标与数据口径](#指标与数据口径)
+- [项目结构](#项目结构)
+
+<a id="快速开始"></a>
+
+## 🚀 快速开始
+
+### 1. 克隆仓库
+
+```bash
+git clone https://github.com/Elaine258/Ecomm-CVR-Agent.git
+cd Ecomm-CVR-Agent
 ```
 
-因此，本项目的目标不是输出一次性的“分析结论”，而是构建一个能够持续工作的 **Closed Loop Diagnosis System（闭环诊断系统）**。
+### 2. 创建 Python 环境
 
----
-
-# 2. Core Capabilities｜核心能力
-
-当前 Agent 包含以下核心能力：
-
-### 1. Conversion Metrics（转化指标计算）
-
-基于用户 Session 行为计算：
-
-- Product Sessions（商品页访问会话）
-- Product → Cart Rate（商品页 → 购物车转化率）
-- Product → Purchase CVR（商品页 → 购买转化率）
-- Cart → Purchase Rate（购物车 → 购买转化率）
-
----
-
-### 2. Category Benchmark（品类基准）
-
-将当前 SKU 与所属 Category（品类）的整体表现进行比较：
-
-```text
-当前 SKU
-    VS
-同品类 Benchmark
+```bash
+conda create -n agent python=3.11 -y
+conda activate agent
 ```
 
-用于判断：
+### 3. 安装依赖
 
-- 当前商品是否明显偏离品类正常水平
-- 偏离程度有多大
-- 哪一个漏斗阶段相对较弱
-
----
-
-### 3. Conversion Anomaly Detection（转化异常检测）
-
-通过确定性的 Rule Engine（规则引擎）进行异常判断。
-
-当前诊断状态包括：
-
-```text
-normal
-未触发异常
-
-low
-轻度异常
-
-severe
-严重异常
-
-insufficient_data
-数据不足
+```bash
+pip install -r requirements.txt
 ```
 
-LLM 不负责决定商品是否异常。
+### 4. 配置环境变量
 
-核心异常状态由代码规则确定，避免模型自由发挥导致诊断标准漂移。
-
----
-
-### 4. Funnel Weak Stage Localization（漏斗薄弱环节定位）
-
-进一步将整体转化问题拆分到两个核心阶段：
+复制 `.env.example` 为 `.env`：
 
 ```text
-Product → Cart
-商品页 → 购物车
-
-Cart → Purchase
-购物车 → 购买
+DEEPSEEK_API_KEY=your_api_key_here
 ```
 
-可能输出：
+如果完整数据不放在仓库的 `data/` 下，可指定绝对路径：
 
 ```text
-product_to_cart
-商品页 → 购物车异常
-
-cart_to_purchase
-购物车 → 购买异常
-
-both
-两个阶段均异常
-
-none
-当前没有明确弱环节
+ECOMM_DATA_DIR=E:\agent\data
 ```
 
-需要强调：
+`.env` 已被 `.gitignore` 排除，请勿提交 API Key。
 
-> **异常阶段定位 ≠ 因果原因判断。**
+### 5. 准备数据
 
-Agent 可以确认“问题主要发生在哪里”，但不会仅根据转化率直接推断“为什么发生”。
+本仓库不重新分发完整 TheLook 数据。运行核心应用至少需要：
 
----
+```text
+data/
+├── events_old.csv
+├── products_old.csv
+└── industry_benchmark_comparison.xlsx
+```
 
-### 5. Structured Next Action（结构化下一步行动）
+`events_old.csv` 和 `products_old.csv` 需要从 TheLook 数据源获取；仓库中的 `samples/` 仅用于查看字段结构，不能复现完整案例结果。详情见 [`data/README.md`](data/README.md)。
 
-诊断结果不会只输出自然语言建议，而是生成固定结构的 Action Contract（行动结构约定）。
+### 6. 启动 Streamlit
 
-例如：
+```bash
+streamlit run app.py
+```
+
+推荐依次输入以下 Product ID 查看不同路由：
+
+```text
+7498   severe
+4680   low
+19681  normal
+16599  insufficient_data
+```
+
+<a id="产品页面"></a>
+
+## 🖥️ 产品页面
+
+Streamlit 页面按照业务阅读顺序组织为：
+
+1. 商品 + 诊断总览
+2. 核心转化漏斗与 Category Benchmark
+3. 诊断结论与证据边界
+4. 可能影响因素（待验证）
+5. 下一步行动
+6. 折叠式诊断历史与闭环结果
+7. 完整 LLM 业务报告
+
+页面将 `severe / cart_to_purchase / expand_investigation` 等内部字段翻译为“严重异常 / 购物车→购买 / 扩大调查范围”，形成 Business Translation Layer（业务翻译层）。
+
+<a id="业务问题"></a>
+
+## 🎯 业务问题
+
+发现某个商品购买转化率偏低，只是分析的起点。业务还需要回答：
+
+1. 样本量是否足以支持诊断？
+2. SKU 相对于同品类表现是否异常？
+3. 问题主要发生在商品页到购物车，还是购物车到购买？
+4. 当前证据能确认什么，哪些原因仍需进一步验证？
+5. 下一步应该补充什么数据、采取什么行动？
+6. 行动完成后是否改善，下一轮策略是什么？
+
+本项目将这些问题组织为一条可重复运行的诊断链路，而不是生成一次性的分析文本。
+
+<a id="四类验证案例"></a>
+
+## 🧪 四类验证案例
+
+以下案例来自当前 TheLook 数据快照，并按照同一套确定性规则执行。它们用于验证路由与业务边界，不代表模型准确率或统计显著性。
+
+| Product ID | 预期状态 | 关键证据 | 系统行为 |
+|---:|---|---|---|
+| `7498` | `severe` 严重异常 | 23 Sessions；SKU CVR 13.04%，Category CVR 26.57%，相对偏离 -50.91% | 进入漏斗与价格分析，主要薄弱环节为购物车→购买 |
+| `4680` | `low` 轻度异常 | 20 Sessions；SKU CVR 15.00%，Category CVR 26.68%，相对偏离 -43.78% | 进入深度诊断，定位主要薄弱环节 |
+| `19681` | `normal` 未触发异常 | 31 Sessions；SKU CVR 25.81%，Category CVR 26.38%，相对偏离 -2.18% | 不执行不必要的深度诊断，生成常规监控行动 |
+| `16599` | `insufficient_data` 数据不足 | 19 Sessions，低于当前门槛 20 | 不判断异常、不定位弱环节、不执行价格或行业解释 |
+
+四类案例体现的不是“每个商品都必须得到复杂结论”，而是 Agent 能根据证据状态选择继续分析或安全停止。
+
+<a id="系统架构"></a>
+
+## 🏗️ 系统架构
+
+系统分为两层：LangGraph 负责单次诊断工作流，应用层负责历史、行动状态、复诊和效果验证。
+
+```mermaid
+flowchart TD
+    INPUT[输入 Product ID] --> METRICS[Conversion Metrics<br/>转化指标计算]
+    METRICS --> ANOMALY[Anomaly Detection<br/>异常检测]
+    ANOMALY --> ROUTER{Rule-based Router<br/>规则路由}
+
+    ROUTER -->|normal| ACTION[Next Action<br/>结构化行动]
+    ROUTER -->|insufficient_data| ACTION
+    ROUTER -->|low / severe| FUNNEL[Funnel Analysis<br/>漏斗分析]
+    FUNNEL --> PRICE[Price Analysis<br/>价格分析]
+    PRICE --> INDUSTRY[Industry Reference<br/>外部背景参考]
+    INDUSTRY --> ACTION
+
+    ACTION --> RESULT[Structured Diagnosis<br/>结构化诊断结果]
+    RESULT --> REPORT[LLM Business Report<br/>业务报告]
+    RESULT --> HISTORY[JSONL Diagnosis History<br/>诊断历史]
+
+    HISTORY --> STATUS[Action Status<br/>行动状态]
+    STATUS -->|completed + new data| REDIAG[Re-diagnosis<br/>复诊]
+    REDIAG --> VALIDATE[Validation Result<br/>效果验证]
+    VALIDATE --> NEXT[Next Round Action<br/>下一轮行动]
+    NEXT --> HISTORY
+```
+
+### LangGraph 诊断节点与路由
+
+| 节点 | 职责 |
+|---|---|
+| `conversion_metrics` | 计算 SKU 与 Category 漏斗指标 |
+| `anomaly_detection` | 根据样本门槛和 CVR 相对偏离输出状态 |
+| `anomaly_router` | 按状态决定是否进入深度诊断 |
+| `funnel_analysis` | 定位 Product→Cart、Cart→Purchase 薄弱环节 |
+| `price_analysis` | 计算 SKU 在所属品类中的价格位置 |
+| `industry_benchmark` | 加载外部行业背景参考，不参与异常阈值 |
+| `next_action` | 生成结构化行动建议 |
+
+`Diagnosis History、Validation、Next Round Action` 由统一入口和应用层衔接，不伪装成 LangGraph 内部节点。
+
+<a id="核心能力"></a>
+
+## 🧩 核心能力
+
+### 1. Conversion Metrics｜转化指标
+
+基于唯一 Session 计算：
+
+- Product Sessions
+- Product → Cart Rate
+- Product → Purchase CVR
+- Cart → Purchase Rate
+
+### 2. Category Benchmark｜品类基准
+
+将当前 SKU 与所属 Category 的总体表现对照，用于判断 SKU 是否偏离品类水平、偏离程度以及哪个漏斗阶段相对较弱。Category Benchmark 是当前数据快照中的内部对照，不是行业标准。
+
+### 3. Conversion Anomaly Detection｜异常检测
+
+核心状态由 Python Rule Engine 决定：
+
+| 状态 | 当前规则 |
+|---|---|
+| `insufficient_data` | Product Sessions < 20 |
+| `severe` | CVR 相对 Category Benchmark 偏离 ≤ -50% |
+| `low` | CVR 相对 Category Benchmark 偏离 ≤ -30% |
+| `normal` | 未触发以上异常规则 |
+
+这里的阈值是项目规则，不等同于统计显著性检验。
+
+### 4. Funnel Weak Stage｜漏斗薄弱环节
+
+对于 `low / severe` 商品，进一步分析：
+
+- `product_to_cart`：商品页 → 购物车
+- `cart_to_purchase`：购物车 → 购买
+- `both`：两个阶段均触发规则
+- `none`：当前没有明确薄弱环节
+
+异常阶段定位只能说明问题集中在哪里，不能直接说明为什么发生。
+
+### 5. Price Analysis｜价格位置
+
+输出 SKU 价格、Category 中位数、价格百分位与 `high / normal / low` 价格状态。价格位置是描述性证据，不证明价格导致转化下降。
+
+### 6. Structured Action｜结构化行动
+
+Agent 使用固定 Action Contract 输出下一步行动：
 
 ```json
 {
@@ -162,1196 +263,143 @@ Agent 可以确认“问题主要发生在哪里”，但不会仅根据转化�
 }
 ```
 
-核心字段：
+结构化字段可以继续被历史管理和闭环逻辑读取，而不是停留在自然语言报告中。
 
-| 字段 | 含义 |
+<a id="规则与-llm-职责分离"></a>
+
+## 🧠 规则与 LLM 职责分离
+
+本项目采用 **Deterministic Rules + LLM Explanation（确定性规则 + 大模型解释）** 的混合架构。
+
+| 确定性逻辑负责 | LLM 负责 |
 |---|---|
-| `priority` | 行动优先级 |
-| `action_type` | 行动类型 |
-| `target_stage` | 当前目标漏斗阶段 |
-| `required_data` | 下一步需要补充的数据 |
-| `reason` | 为什么执行这个行动 |
-| `goal` | 希望通过行动解决什么问题 |
+| 数据读取与指标计算 | 将结构化结果翻译为业务语言 |
+| Category Benchmark | 组织诊断报告 |
+| 样本门槛与异常状态 | 解释指标之间的关系 |
+| 漏斗薄弱环节 | 提高报告可读性 |
+| Price Status | 不修改核心诊断事实 |
+| Action Contract | 不生成不存在的数据 |
+| Validation Result | 不将相关性表述为因果关系 |
+| Next Round Action | 不创造显著性、p 值或置信区间 |
 
----
+> 规则负责决定事实，LLM 负责解释事实。
 
-### 6. Closed Loop Validation（闭环效果验证）
+<a id="证据边界"></a>
 
-Agent 不会在给出建议后停止。
+## 🛡️ 证据边界
 
-行动执行完成后，可以基于新的业务数据再次运行诊断：
+### 异常不等于因果
 
-```text
-Diagnosis
-诊断
-    ↓
-Action
-行动
-    ↓
-Execution
-执行
-    ↓
-Re-diagnosis
-复诊
-    ↓
-Validation
-效果验证
-    ↓
-Next Round Action
-下一轮行动
-```
+系统可以确认 SKU 是否触发当前规则、哪个漏斗阶段相对较弱，但不能仅凭漏斗指标确定用户心理或真实流失原因。
 
-验证结果包括：
+### Price Position 不等于 Price Cause
 
-```text
-improved
-改善
+价格百分位是描述性证据。即使 `price_status = high`，也不能证明价格导致转化下降。
 
-unchanged
-无变化
+### External Benchmark 仅作背景参考
 
-worsened
-恶化
+Dynamic Yield 与 TheLook 的数据来源、时间范围和统计口径不同，因此不参与 Agent 的核心异常阈值计算，也不用于直接推算 SKU 应达到的 CVR。
 
-unknown
-无法判断
-```
+### 样本门槛不是显著性检验
 
-不同验证结果会生成不同的下一轮策略。
+当前最低门槛为 20 Product Sessions，只是项目的诊断保护规则，不代表结论已经通过统计显著性检验。
 
-例如：
+### Closed Loop 需要新数据
+
+行动完成后只有底层业务数据发生变化，复诊才可能观察到指标变化。系统不会伪造“行动后提升”。
+
+<a id="闭环验证"></a>
+
+## 🔄 闭环验证
+
+每次诊断结果保存为 JSONL 历史记录，并包含 Action Status：
 
 ```text
-上一轮行动已完成
-        ↓
-重新诊断
-        ↓
-转化表现无变化
-        ↓
-Validation Result = unchanged
-        ↓
-expand_investigation
-扩大调查范围
+pending → in_progress → completed → validated
 ```
 
-这使 Agent 从一次性诊断工具升级为持续迭代的业务诊断系统。
+- `completed` 只表示行动已经执行，不代表行动有效
+- 上一轮行动为 `completed` 且产生新业务数据后，才能通过复诊验证效果
+- 如果底层数据没有变化，复诊结果保持不变是正确行为
 
----
+| 验证结果 | 含义 | 下一轮行动 |
+|---|---|---|
+| `improved` | 指标改善 | `monitor_after_improvement` |
+| `unchanged` | 未观察到改善 | `expand_investigation` |
+| `worsened` | 表现恶化 | `escalate_investigation` |
+| `unknown` | 证据不足 | `collect_validation_data` |
 
-# 3. Agent Architecture｜Agent 架构
+当前闭环是可运行的验证机制原型：行动状态由用户更新，系统负责保存历史、比较复诊结果并生成下一轮行动；它没有连接真实电商平台自动执行运营动作。
 
-项目使用 LangGraph 构建 Agent Workflow（智能体工作流）。
+<a id="指标与数据口径"></a>
 
-```mermaid
-flowchart TD
+## 📐 指标与数据口径
 
-    A[输入 Product ID] --> B[Conversion Metrics<br/>转化指标计算]
-
-    B --> C[Anomaly Detection<br/>异常检测]
-
-    C --> D{Router<br/>诊断路由}
-
-    D -->|Normal| I[Next Action<br/>常规监控]
-
-    D -->|Insufficient Data| J[Next Action<br/>继续积累样本]
-
-    D -->|Low / Severe| E[Funnel Analysis<br/>漏斗分析]
-
-    E --> F[Price Analysis<br/>价格分析]
-
-    F --> G[Industry Reference<br/>外部行业参考]
-
-    G --> H[Next Action<br/>结构化行动]
-
-    I --> K[History<br/>保存诊断历史]
-    J --> K
-    H --> K
-
-    K --> L[Action Execution<br/>行动执行]
-
-    L --> M[Re-diagnosis<br/>重新诊断]
-
-    M --> N[Validation<br/>效果验证]
-
-    N --> O[Next Round Action<br/>下一轮行动]
-
-    O --> K
-```
-
----
-
-# 4. Deterministic Logic + LLM｜规则与大模型职责分离
-
-本项目刻意没有让 LLM 决定所有业务逻辑。
-
-整体职责分为两层。
-
-## Deterministic Layer（确定性逻辑层）
-
-负责：
-
-- 数据读取
-- 指标计算
-- Category Benchmark
-- 异常阈值判断
-- Funnel 弱环节定位
-- Action Contract
-- Validation Result
-- Next Round Action
-- History 状态管理
-
-这些核心业务事实由 Python 规则确定。
-
----
-
-## LLM Layer（大模型层）
-
-负责：
-
-- 将结构化结果翻译成业务语言
-- 整理诊断报告
-- 解释指标关系
-- 提高报告可读性
-
-LLM 不允许：
-
-- 修改核心异常状态
-- 自行创造统计显著性
-- 自行修改行动目标
-- 将相关性描述为因果关系
-- 将未执行的 Tool 解释为“数据不存在”
-
-因此整体设计原则是：
-
-> **规则负责决定事实，LLM 负责解释事实。**
-
----
-
-# 5. Metric Methodology｜指标方法
-
-## 5.1 Product Sessions
-
-当前商品被访问过的唯一 Session 数：
+### 核心公式
 
 ```text
 Product Sessions
-=
-COUNT(DISTINCT session_id)
-```
+= COUNT(DISTINCT session_id with product view)
 
----
+Product → Cart Rate
+= Sessions with cart / Product Sessions
 
-## 5.2 Product → Cart Rate
+Product → Purchase CVR
+= Sessions with purchase / Product Sessions
 
-```text
-发生 Cart 的唯一 Product Session
-----------------------------------
-      Product Sessions
-```
+Cart → Purchase Rate
+= Sessions with purchase / Sessions with cart
 
----
-
-## 5.3 Product → Purchase CVR
-
-```text
-发生 Purchase 的唯一 Product Session
---------------------------------------
-          Product Sessions
-```
-
----
-
-## 5.4 Cart → Purchase Rate
-
-```text
-发生 Purchase 的唯一 Session
-------------------------------
-   发生 Cart 的唯一 Session
-```
-
----
-
-## 5.5 Relative Deviation｜相对偏离
-
-SKU 与 Category Benchmark 的相对偏离：
-
-```text
-SKU Metric - Category Metric
-----------------------------
-       Category Metric
-```
-
-即：
-
-```python
-deviation = (
-    sku_metric - category_metric
-) / category_metric
-```
-
-例如：
-
-```text
-SKU CVR = 13%
-
-Category CVR = 26%
-
-Relative Deviation ≈ -50%
-```
-
-这里的 `-50%` 是：
-
-> SKU 相对于 Category Benchmark 的相对偏离
-
-而不是：
-
-> “损失了 50 个百分点”。
-
-Relative Deviation（相对偏离）与 Percentage Point Difference（百分点差）必须严格区分。
-
----
-
-# 6. Data Attribution Validation｜数据归因验证
-
-在项目开发过程中，对 Session-level Event（会话级事件）向 Product-level Metric（商品级指标）的映射进行了专门的数据完整性验证。
-
-原因是：
-
-`product` Event 可以直接从 URI 中得到 `product_id`：
-
-```text
-/product/7498
-```
-
-但是：
-
-```text
-/cart
-/purchase
-```
-
-本身不包含 `product_id`。
-
-因此理论上存在一个潜在风险：
-
-```text
-一个 Session 浏览商品 A
-一个 Session 浏览商品 B
-最后购买商品 B
-        ↓
-如果直接按照 Session 归因
-        ↓
-商品 A 可能也被错误认为发生 Purchase
-```
-
-针对这一风险，对 TheLook 全量 Events 数据进行了验证。
-
-## 验证结果
-
-### Session 中唯一商品数量
-
-```text
-商品浏览 Session：681,755
-
-单商品 Session：
-681,755
-100.00%
-
-多商品 Session：
-0
-0.00%
-```
-
-即：
-
-> 当前 TheLook 数据中，一个 Session 始终只对应一个唯一 Product。
-
----
-
-### Cart Attribution（加购归因）
-
-```text
-Cart Event：
-596,438
-
-前一个 Event 直接为 Product：
-596,438
-
-直接归因比例：
-100.00%
-```
-
-说明：
-
-```text
-Product
-↓
-Cart
-```
-
-在当前数据中具有稳定的行为序列关系。
-
----
-
-### Purchase Session
-
-```text
-Purchase Session：
-181,755
-
-单商品 Purchase Session：
-181,755
-
-多商品 Purchase Session：
-0
-```
-
-即：
-
-> 所有 Purchase Session 均只有一个唯一 Product。
-
----
-
-### Purchase ⊆ Cart
-
-进一步验证：
-
-```text
-Cart Session：
-432,366
-
-Purchase Session：
-181,755
-
-同时存在 Cart 的 Purchase Session：
-181,755
-
-没有 Cart 的 Purchase Session：
-0
-
-覆盖率：
-100.00%
-```
-
-满足：
-
-```text
-Purchase Sessions ⊆ Cart Sessions
-```
-
-因此当前：
-
-```text
-Product → Cart
-Product → Purchase
-Cart → Purchase
-```
-
-的 Session-level Funnel（会话级漏斗）在这份 TheLook 数据结构下成立。
-
----
-
-## Engineering Improvement｜工程加固
-
-虽然当前 TheLook 数据不存在多商品 Session，但为了保证代码未来迁移到真实业务数据时仍保持 Grain（统计粒度）一致，Category 和 SKU 的漏斗分子均显式使用：
-
-```python
-category_cart_sessions = (
-    category_data.loc[
-        category_data["has_cart"],
-        "session_id"
-    ]
-    .nunique()
-)
-
-category_purchase_sessions = (
-    category_data.loc[
-        category_data["has_purchase"],
-        "session_id"
-    ]
-    .nunique()
-)
-```
-
-保证：
-
-```text
-分母 = Unique Session
-
-分子 = Unique Session
-```
-
-避免未来在 Multi-product Session（多商品会话）数据中产生重复计数。
-
----
-
-# 7. Diagnostic Logic｜诊断逻辑
-
-Agent 首先检查数据量。
-
-当商品访问 Session 数不足最低诊断要求时：
-
-```text
-status = insufficient_data
-```
-
-此时只展示原始指标，不进行：
-
-- 异常判断
-- Funnel 弱环节判断
-- 价格异常判断
-- 因果假设生成
-- 行业对比结论
-
-下一步行动为继续积累样本，并在数据达到要求后重新诊断。
-
----
-
-当数据量满足诊断条件后，Rule Engine 根据 SKU CVR 与 Category Benchmark 的偏离程度输出：
-
-```text
-normal
-low
-severe
-```
-
-对于异常商品进一步拆分：
-
-```text
-Product → Cart
-
-Cart → Purchase
-```
-
-并判断：
-
-```text
-product_to_cart
-cart_to_purchase
-both
-none
-```
-
----
-
-# 8. Evidence Boundary｜证据与因果边界
-
-项目中刻意区分四个层级：
-
-```text
-Fact
-事实
-↓
-Rule Judgment
-规则判断
-↓
-Hypothesis
-待验证假设
-↓
-Causal Conclusion
-因果结论
-```
-
-例如：
-
-```text
-事实：
-SKU Cart → Purchase Rate 低于 Category Benchmark
-
-规则判断：
-Cart → Purchase 达到当前异常阈值
-
-可以得出：
-主要异常阶段位于购物车 → 购买
-
-不能直接得出：
-用户因为价格太高所以没有购买
-```
-
-因此报告会明确说明：
-
-> **现有证据不足以确定因果原因。**
-
-价格、运费、支付方式、库存、配送等，只能作为下一步需要验证的因素。
-
----
-
-# 9. Price Analysis｜价格分析
-
-对于异常商品，Agent 会计算当前商品在所属 Category 中的价格位置。
-
-主要输出：
-
-```text
-retail_price
-商品零售价
-
-category_price_median
-品类价格中位数
-
-price_percentile
-价格百分位
-
-price_status
-价格状态
-```
-
-价格状态包括：
-
-```text
-high
-价格位置偏高
-
-normal
-正常区间
-
-low
-价格位置偏低
-```
-
-需要强调：
-
-> `price_status = high` 只表示商品价格处于当前品类较高位置，不代表价格已经被证明是转化下降的原因。
-
----
-
-# 10. Industry Reference｜行业参考
-
-项目引入 Dynamic Yield Benchmark 作为外部行业背景参考。
-
-但 TheLook 与 Dynamic Yield：
-
-- 数据来源不同
-- 时间范围不同
-- 样本构成不同
-- 指标统计口径不同
-
-因此：
-
-> Dynamic Yield 不参与当前 Agent 的异常阈值计算，也不会被直接用于判断 SKU 高于或低于行业水平。
-
-它仅作为：
-
-```text
-Industry Context
-行业背景参考
-```
-
----
-
-# 11. Action Status｜行动状态
-
-每一次诊断生成的行动具有独立生命周期：
-
-```text
-pending
-待执行
-
-↓
-
-in_progress
-执行中
-
-↓
-
-completed
-执行完成
-
-↓
-
-validated
-完成复诊验证
-```
-
-其中：
-
-```text
-completed
-```
-
-只代表：
-
-> 行动已经执行完成。
-
-并不代表：
-
-> 行动已经有效。
-
-只有新的业务数据产生后再次诊断，系统才会进入：
-
-```text
-validated
-```
-
-并产生 Validation Result（验证结果）。
-
----
-
-# 12. Closed Loop Logic｜闭环逻辑
-
-上一轮行动完成后：
-
-```text
-Previous Diagnosis
-上一轮诊断
-        ↓
-Previous Action
-上一轮行动
-        ↓
-Completed
-执行完成
-        ↓
-New Business Data
-新业务数据
-        ↓
-Re-diagnosis
-复诊
-        ↓
-Compare
-前后对比
-        ↓
-Validation Result
-效果验证
-```
-
-不同验证结果对应不同策略。
-
-### Improved
-
-```text
-improved
-↓
-monitor_after_improvement
-↓
-持续监控改善是否稳定
-```
-
-### Unchanged
-
-```text
-unchanged
-↓
-expand_investigation
-↓
-扩大验证范围
-```
-
-### Worsened
-
-```text
-worsened
-↓
-escalate_investigation
-↓
-升级调查
-```
-
-### Unknown
-
-```text
-unknown
-↓
-collect_validation_data
-↓
-补充验证数据
-```
-
----
-
-# 13. Product UI｜产品页面
-
-项目使用 Streamlit 构建交互式业务页面。
-
-最终页面采用：
-
-```text
-顶部 Product ID 输入
-        ↓
-① 商品 + 诊断总览
-        ↓
-② 核心转化漏斗
-        ↓
-③ 诊断结论
-        ↓
-④ 可能影响因素（待验证）
-        ↓
-⑤ 下一步行动
-        ↓
-诊断历史与闭环
-        ↓
-完整诊断报告
-```
-
-页面重点不是展示模型内部字段，而是将：
-
-```text
-severe
-cart_to_purchase
-expand_investigation
-```
-
-翻译成：
-
-```text
-严重异常
-购物车 → 购买
-扩大调查范围
-```
-
-形成 Business Translation Layer（业务翻译层）。
-
----
-
-## 页面展示
-
-建议后续将最终截图放入：
-
-```text
-docs/images/
-```
-
-例如：
-
-```markdown
-![诊断总览](docs/images/diagnosis_overview.png)
-
-![下一步行动](docs/images/next_action.png)
-
-![诊断闭环](docs/images/closed_loop.png)
-```
-
-推荐只保留三张核心截图：
-
-1. 商品诊断总览 + 转化漏斗
-2. 下一步行动 + Action Status
-3. Closed Loop + History
-
----
-
-# 14. Example Diagnosis｜诊断示例
-
-以异常 SKU 为例，Agent 可以形成如下业务链路：
-
-```text
-购买转化率明显低于 Category Benchmark
-        ↓
-整体状态达到严重异常规则
-        ↓
-拆解 Funnel
-        ↓
-主要弱环节：
-购物车 → 购买
-        ↓
-当前证据不足以判断具体原因
-        ↓
-收集：
-结账步骤漏斗
-购物车放弃原因
-运费与税费
-支付方式
-库存与配送
-        ↓
-行动执行
-        ↓
-再次诊断
-        ↓
-转化表现未改善
-        ↓
-Validation Result：
-unchanged
-        ↓
-Next Round Action：
-expand_investigation
-        ↓
-进一步检查：
-同品类商品对比
-同价格带商品对比
-历史转化趋势
-```
-
-这体现了 Agent 的核心价值：
-
-> 不只是“告诉你发生了什么”，而是持续推动下一步问题验证。
-
----
-
-# 15. Technology Stack｜技术栈
-
-### Data
-
-- TheLook E-commerce Dataset
-- Pandas
-- Excel / CSV
-
-### Agent
-
-- Python
-- LangGraph
-- LangChain
-- Structured Output
-- Rule Engine
-
-### LLM
-
-- DeepSeek
-- `deepseek-v4-flash`
-
-### Product UI
-
-- Streamlit
-- Altair
-
-### Engineering
-
-- Git
-- GitHub
-- `.env`
-- JSONL History
-
----
-
-# 16. Project Structure｜项目结构
-
-```text
-agent/
-│
-├── app.py
-│
-├── README.md
-│
-│
-├── data/
-│   ├── events_old.csv
-│   ├── orders.csv
-│   ├── order_items.csv
-│   ├── products_old.csv
-│   ├── inventory_items_old.csv
-│   ├── users_old.csv
-│   ├── distribution_centers.csv
-│   ├── industry_benchmark_comparison.xlsx
-│   └── diagnosis_history_business.jsonl
-│
-├── src/
-│   ├── conversion_diagnosis_agent.py
-│   ├── diagnosis_history.py
-│   │
-│   └── rules/
-│       └── conversion_anomaly.py
-│
-├── experiments/
-│   ├── phase2_langchain/
-│   ├── phase5_closed_loop/
-│   └── ...
-│
-└── .env
-```
-
-> 大型原始数据、API Key、运行历史文件建议根据实际情况加入 `.gitignore`，避免直接上传 GitHub。
-
----
-
-# 17. How to Run｜运行方式
-
-## 1. 创建 Python 环境
-
-推荐使用独立虚拟环境。
-
-例如：
-
-```bash
-conda activate agent
-```
-
----
-
-## 2. 安装依赖
-
-根据项目环境安装：
-
-```bash
-pip install pandas
-pip install streamlit
-pip install altair
-pip install langgraph
-pip install langchain
-pip install langchain-openai
-pip install python-dotenv
-pip install openpyxl
-```
-
-后续建议统一生成：
-
-```text
-requirements.txt
-```
-
----
-
-## 3. 配置 API Key
-
-项目根目录创建：
-
-```text
-.env
-```
-
-写入：
-
-```text
-DEEPSEEK_API_KEY=your_api_key
-```
-
-不要将 `.env` 上传到 GitHub。
-
----
-
-## 4. 启动 Streamlit
-
-项目根目录：
-
-```bash
-streamlit run app.py
-```
-
-然后在页面输入：
-
-```text
-Product ID
-```
-
-即可开始诊断。
-
----
-
-# 18. Methodological Boundaries｜方法边界
-
-为了避免过度解释，当前项目遵守以下限制。
-
-### 1. 异常不等于因果
-
-发现某一 Funnel 阶段异常，不代表已经知道异常原因。
-
----
-
-### 2. Relative Deviation 不等于百分点差
-
-```text
 Relative Deviation
+= (SKU Metric - Category Metric) / Category Metric
 ```
 
-表示相对于 Benchmark 的比例偏离，而不是 Percentage Point Difference。
+`Relative Deviation = -50%` 表示 SKU 相对于 Benchmark 低 50%，不表示低 50 个百分点。
 
----
+### Session Attribution 验证
 
-### 3. Price Position 不等于 Price Cause
+项目在当前 TheLook 数据快照上验证了 Session Event 到 Product Metric 的映射前提：
 
-价格位置较高只能作为待验证因素，不能直接解释转化下降。
+- 单商品 Session：100%
+- 多商品 Session：0%
+- Cart 前存在 Product Event：100%
+- Purchase Session 属于 Cart Session：100%
 
----
+因此当前快照可以将 Session-level Cart/Purchase 映射到 Session 中的唯一商品。迁移到真实电商数据时，必须重新验证多商品 Session、商品级加购归因和订单级购买归因。
 
-### 4. External Benchmark 仅作为背景参考
+更多说明：
 
-Dynamic Yield 与 TheLook 的统计口径不同，因此不参与 Agent 的核心异常规则。
+- [`docs/methodology.md`](docs/methodology.md)：指标、规则和数据归因
+- [`docs/closed_loop_design.md`](docs/closed_loop_design.md)：历史、行动状态与验证分支
+- [`docs/conversion_diagnosis_decision_tree.md`](docs/conversion_diagnosis_decision_tree.md)：诊断决策树
 
----
+<a id="项目结构"></a>
 
-### 5. Closed Loop 依赖新的业务数据
-
-行动执行完成后，如果底层数据没有变化：
+## 📁 项目结构
 
 ```text
-Re-diagnosis
+Ecomm-CVR-Agent/
+├── app.py                              # Streamlit 交互页面
+├── src/
+│   ├── conversion_diagnosis_agent.py   # LangGraph 诊断工作流与统一入口
+│   ├── diagnosis_history.py            # 历史、行动状态与闭环验证
+│   └── rules/
+│       └── conversion_anomaly.py       # 确定性异常规则
+├── data/
+│   ├── README.md                       # 数据来源与许可说明
+│   └── industry_benchmark_comparison.xlsx
+├── samples/                            # 字段样例，不用于完整诊断
+├── docs/                               # 方法论、决策树与闭环说明
+├── experiments/                        # 学习过程与分阶段验证
+├── scripts/                            # 数据检查脚本
+├── .env.example
+├── .gitignore
+├── requirements.txt
+└── README.md
 ```
 
-仍然会得到相同指标。
+`experiments/` 保留了从基础概念到完整诊断闭环的学习与验证过程；正式应用入口是：
 
-这属于正确行为，而不是系统错误。
-
----
-
-### 6. 当前 Session Attribution 基于 TheLook 数据结构
-
-目前全量验证发现：
-
-```text
-1 Session = 1 Unique Product
+```python
+from src.conversion_diagnosis_agent import diagnose_product
 ```
-
-因此 Session-level Cart / Purchase 可以稳定映射至该 Session 的唯一商品。
-
-如果未来迁移到真实业务数据，应重新检查：
-
-```text
-Multi-product Session
-多商品会话
-
-Product-level Cart Attribution
-商品级加购归因
-
-Order-level Purchase Attribution
-订单级购买归因
-```
-
-不能直接假设真实数据与 TheLook 具有相同结构。
-
----
-
-# 19. Project Highlights｜项目亮点
-
-## 1. 真实数据驱动，而不是纯 Prompt Demo
-
-核心诊断依据来自 TheLook 用户行为和商品数据，而不是让 LLM 自行生成事实。
-
----
-
-## 2. Rule + LLM Hybrid Architecture
-
-通过：
-
-```text
-Deterministic Rule
-+
-LLM Explanation
-```
-
-同时保证诊断稳定性和业务可读性。
-
----
-
-## 3. Structured Action，而不是自然语言建议
-
-Agent 输出具有固定字段的 Action Contract，可以被程序继续执行、追踪和验证。
-
----
-
-## 4. 真正的 Closed Loop
-
-项目包含：
-
-```text
-Diagnosis
-→ Action
-→ Execution
-→ Re-diagnosis
-→ Validation
-→ Next Action
-```
-
-而不是在生成第一份报告后结束。
-
----
-
-## 5. 明确区分事实、判断与假设
-
-避免：
-
-```text
-转化下降
-→ 直接猜价格、支付、物流原因
-```
-
-而是采用：
-
-```text
-事实
-↓
-规则判断
-↓
-待验证假设
-↓
-补充数据
-↓
-再次验证
-```
-
----
-
-## 6. 对底层指标进行了 Data Validation
-
-项目不仅实现了 Agent Workflow，也对：
-
-- Session 与 Product 关系
-- Cart Attribution
-- Purchase Attribution
-- Funnel 完整性
-- Category Benchmark Grain
-
-进行了额外的数据假设验证。
-
-避免在错误指标基础上继续构建上层 Agent。
-
----
-
-# 20. Future Improvements｜后续可扩展方向
-
-当前版本已经完成完整诊断闭环，后续可以继续扩展：
-
-### 数据层
-
-- 接入真实电商埋点
-- Product-level Cart Event
-- Checkout Step Funnel
-- Traffic Source
-- Inventory
-- Shipping
-- Payment Method
-
-### 诊断层
-
-- 时间趋势异常检测
-- 同价格带 Benchmark
-- 同类 SKU 横向比较
-- Traffic Source 分层诊断
-
-### Agent 层
-
-- Tool 自动选择
-- 动态调查计划
-- 更细粒度 Validation
-- 长期 Diagnosis Memory
-
-### 产品层
-
-- 多 SKU 批量诊断
-- 异常商品排行榜
-- Dashboard
-- 自动生成业务周报
-- 行动任务管理
-
----
-
-# 21. Summary｜项目总结
-
-这个项目尝试解决的不是：
-
-> “如何让 LLM 分析一组电商数据？”
-
-而是：
-
-> **如何把数据分析、业务规则、Agent Workflow、行动管理和反馈验证组合成一个能够持续工作的业务诊断系统。**
-
-最终形成：
-
-```text
-数据
-↓
-指标
-↓
-异常识别
-↓
-问题定位
-↓
-结构化行动
-↓
-执行
-↓
-复诊
-↓
-效果验证
-↓
-下一轮行动
-```
-
-这也是本项目最核心的设计目标：
-
-> **让 Agent 不只输出答案，而是推动业务问题持续向下一步解决。**

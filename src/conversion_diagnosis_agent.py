@@ -44,7 +44,12 @@ load_dotenv()
 # 数据路径
 # ==================================================
 
-DATA_DIR = r"E:\agent\data"
+DATA_DIR = os.path.abspath(
+    os.getenv(
+        "ECOMM_DATA_DIR",
+        os.path.join(ROOT, "data")
+    )
+)
 EVENTS_PATH = os.path.join(
     DATA_DIR,
     "events_old.csv"
